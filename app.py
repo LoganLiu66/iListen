@@ -11,7 +11,7 @@ def download_audio(url_input, upload_input, mode, show_text):
     logging.info(f"Success: {success}, Status: {status}")
 
     if not success:
-        return status, audio_infos, unvisited_audios, 0, None, None, None, None, None, None
+        return status, audio_infos, [], None, None, None, None, None, None, None, None
     
     if mode == "Random":
         shuffled_audio_infos = audio_infos.copy()
@@ -105,8 +105,9 @@ def main():
         batch_audio_list = gr.State([])
 
         gr.Markdown("## iListen")
-        gr.Markdown("A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [faster-whisper](https://github.com/guillaumekln/faster-whisper). Then you can listen to the audio and practice your listening skills.")
-        gr.Markdown("👉🏻[GitHub](https://github.com/loganliu66/iListen)👈🏻")
+        gr.Markdown("A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [pywhispercpp](https://github.com/absadiki/pywhispercpp). Then you can listen to the audio and practice your listening skills. 👉🏻[GitHub](https://github.com/loganliu66/iListen)👈🏻")
+        gr.Markdown("NOTE: It's best to run this demo locally, as higging_face's ip may be blocked by YouTube to the point where it won't download the audio!")
+
         with gr.Tab("URL"):
             url_input = gr.Textbox(label="Audio URL", placeholder="Enter YouTube, Bilibili or direct audio URL")
         with gr.Tab("Upload"):
