@@ -99,6 +99,14 @@ def change_show_text(batch_audio_list, index, show_text):
     return text1, text2, text3
 
 
+def url_tab_select():
+    return None
+
+
+def upload_tab_select():
+    return None
+
+
 def main():
     with gr.Blocks() as demo:
         audio_infos = gr.State([])
@@ -108,18 +116,19 @@ def main():
         gr.Markdown("A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [pywhispercpp](https://github.com/absadiki/pywhispercpp). Then you can listen to the audio and practice your listening skills. 👉🏻[GitHub](https://github.com/loganliu66/iListen)👈🏻")
         gr.Markdown("NOTE: It's best to run this demo locally, as higging_face's ip may be blocked by YouTube to the point where it won't download the audio!")
 
-        with gr.Tab("URL"):
+        url_tab = gr.Tab("URL")
+        upload_tab = gr.Tab("Upload")
+        with url_tab:
             url_input = gr.Textbox(label="Audio URL", placeholder="Enter YouTube, Bilibili or direct audio URL")
-        with gr.Tab("Upload"):
+        with upload_tab:
             upload_input = gr.Audio(label="Upload Audio", type="filepath", sources="upload", format="mp3")
 
         extract_btn = gr.Button("Extract Audios")
         output_info = gr.Textbox(label="Output Info", value="")
 
-        with gr.Accordion("Advanced Settings", open=False):
-            with gr.Row():
-                mode = gr.Dropdown(label="Mode", choices=["Sequential", "Random"], value="Sequential")
-                show_text = gr.Dropdown(label="Show Text", choices=["Yes", "No"], value="No")
+        with gr.Row():
+            mode = gr.Dropdown(label="Mode", choices=["Sequential", "Random"], value="Sequential")
+            show_text = gr.Dropdown(label="Show Text", choices=["Yes", "No"], value="No")
         
         with gr.Row():
             prev_btn = gr.Button("Previous")
@@ -172,6 +181,17 @@ def main():
             outputs=[text1, text2, text3]
         )
 
+        url_tab.select(
+            fn=url_tab_select,
+            inputs=[],
+            outputs=[url_input]
+        )
+
+        upload_tab.select(
+            fn=upload_tab_select,
+            inputs=[],
+            outputs=[upload_input]
+        )
         
     demo.launch()
 
