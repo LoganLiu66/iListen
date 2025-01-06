@@ -113,7 +113,7 @@ def main():
         batch_audio_list = gr.State([])
 
         gr.Markdown("## iListen")
-        gr.Markdown("A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [pywhispercpp](https://github.com/absadiki/pywhispercpp). Then you can listen to the audio and practice your listening skills. 👉🏻[GitHub](https://github.com/loganliu66/iListen)👈🏻")
+        gr.Markdown("A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [whisperx](https://github.com/m-bain/whisperX). Then you can listen to the audio and practice your listening skills. 👉🏻[GitHub](https://github.com/loganliu66/iListen)👈🏻")
         gr.Markdown("NOTE: It's best to run this demo locally, as higging_face's ip may be blocked by YouTube to the point where it won't download the audio!")
 
         url_tab = gr.Tab("URL")

@@ -1,14 +1,23 @@
 import hashlib
 import logging
 import numpy as np
+import spaces
+import torch
+import whisperx
 import yt_dlp
 from pathlib import Path
 from pydub import AudioSegment
-from pywhispercpp.model import Model
+from tn.english.normalizer import Normalizer
 
-model = Model(models_dir='models/whisper', model='base.en')
+device = "cuda" if torch.cuda.is_available() else "cpu"
+batch_size = 16
+sr = 16000
+asr_model = whisperx.load_model("base.en", device=device, compute_type="float32", download_root="models")
+tn_model = Normalizer(cache_dir="models/tn")
+align_model, metadata = whisperx.load_align_model(language_code='en', device=device, model_dir="models")
 
 
+@spaces.GPU
 def extract_audios(url, upload):
     # download audio
     if upload:
@@ -18,24 +27,40 @@ def extract_audios(url, upload):
         if not success:
             return False, reason, []
 
-    audio = AudioSegment.from_file(audio_file)
-    audio.set_channels(1)
+    audio = whisperx.load_audio(audio_file)
 
     id = Path(audio_file).stem
     logging.info("Transcribing...")
-    segments = model.transcribe(audio_file)
+    # Each element in result['segments'] including multiple sentences, depended on the vad model
+    result = asr_model.transcribe(audio, batch_size=batch_size)
+    segments = result["segments"]
+    logging.info("Normalizing...")
+    for segment in segments:
+        segment['text'] = tn_model.normalize(segment['text'])
+    logging.info("Aligning...")
+    # After align, each element in result['segments'] including only one sentence
+    result = whisperx.align(segments, align_model, metadata, audio, device, return_char_alignments=False)
+    segments = result["segments"]
+
     output_dir = f'output/downloaded_audios/{id}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     audio_infos = []
     for i, segment in enumerate(segments):
         logging.info(segment)
-        begin = segment.t0
-        end = segment.t1
-        text = segment.text
-        segment_audio = audio[begin * 10: end * 10 - 100]    
+        begin = segment['start']
+        end = segment['end']
+        text = segment['text']
+        segment_audio = audio[int(begin * sr): int(end * sr)]
+        segment_audio = (segment_audio * 32767).astype(np.int16)
+        audio_segment = AudioSegment(
+            segment_audio.tobytes(), 
+            frame_rate=sr,
+            sample_width=2,
+            channels=1
+        )
         audio_path = f'{output_dir}/{id}_{str(i).zfill(4)}.mp3'
-        segment_audio.export(audio_path, format='mp3')
+        audio_segment.export(audio_path, format="mp3")
         audio_infos.append((audio_path, text))
         logging.info(f'Successfully exported {audio_path}')
     return True, "Successfully extracted", audio_infos
