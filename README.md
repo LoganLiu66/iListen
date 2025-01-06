@@ -12,7 +12,7 @@ license: other
 # iListen
 
 <div align="center">
-    <img src="./images/iListen.png" alt="iListen" width="100">
+    <img src="./images/iListen.png" alt="iListen" width="200">
 </div>
 
 <strong>iListen</strong>: A gradio app for English listening practice. Source audio can be any you interested in, like Youtube, Bilibili, or even your own audio files. This app will automatically download the audio using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and split it into sentences using [faster-whisper](https://github.com/guillaumekln/faster-whisper). Then you can listen to the audio and practice your listening skills.
@@ -21,6 +21,9 @@ license: other
 ## Usage
 
 ```bash
+git clone https://github.com/loganliu66/iListen.git
+cd iListen
+pip install -r requirements.txt
 python app.py
 ```
 
