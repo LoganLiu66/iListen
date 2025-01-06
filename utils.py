@@ -67,6 +67,7 @@ def download_audio(url):
 
 
 def setup_logger():
+    Path('output/logs').mkdir(parents=True, exist_ok=True)
     logging.basicConfig(filename='output/logs/gradio.txt', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
