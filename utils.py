@@ -10,7 +10,7 @@ from pydub import AudioSegment
 from tn.english.normalizer import Normalizer
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-batch_size = 16
+batch_size = 8
 sr = 16000
 asr_model = whisperx.load_model("base.en", device=device, compute_type="float32", download_root="models")
 tn_model = Normalizer(cache_dir="models/tn")
