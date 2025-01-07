@@ -1,7 +1,6 @@
 import gradio as gr
 import logging
 import random
-from pathlib import Path
 from utils import extract_audios, setup_logger
 
 
@@ -120,8 +119,20 @@ def main():
         upload_tab = gr.Tab("Upload")
         with url_tab:
             url_input = gr.Textbox(label="Audio URL", placeholder="Enter YouTube, Bilibili or direct audio URL")
+            gr.Examples(
+                examples=[
+                    "https://paddlespeech.bj.bcebos.com/Parakeet/docs/demos/tacotron2_ljspeech_waveflow_samples_0.2/sentence_1.wav"
+                ],
+                inputs=[url_input]
+            )
         with upload_tab:
             upload_input = gr.Audio(label="Upload Audio", type="filepath", sources="upload", format="mp3")
+            gr.Examples(
+                examples=[
+                    "audios/cut_20250107_103715.wav"
+                ],
+                inputs=[upload_input]
+            )
 
         extract_btn = gr.Button("Extract Audios")
         output_info = gr.Textbox(label="Output Info", value="")

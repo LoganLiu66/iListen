@@ -1,14 +1,3 @@
----
-title: iListen
-emoji: 🎧
-colorFrom: green
-colorTo: blue
-sdk: gradio
-sdk_version: 5.9.1
-app_file: app.py
-pinned: false
-license: other
----
 # iListen
 
 <div align="center">
@@ -32,6 +21,7 @@ python app.py
 - [x] Download audio URL(Youtube, Bilibili, Wave URL) using [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 - [x] Sentence-level Segmentation using [whisperx](https://github.com/m-bain/whisperX).
 - [x] Two listening modes: Random and Sequential.
+- [x] CPU/GPU support.
 
 ## TODO
 
@@ -42,7 +32,7 @@ python app.py
 - The text from whisper is not always accurate.
 - The audio and text may not be fully aligned.
 - The audio is not always downloaded successfully due to blocked IP by Youtube or Bilibili.
-- If you want to use this app on MacOS, please build [openfst1.8.3](https://www.openfst.org/twiki/bin/view/FST/WebHome) manually and install [pynini2.1.6](https://www.openfst.org/twiki/bin/view/GRM/Pynini) by `conda install -c conda-forge pynini` and then install [WeTextProcessing 1.0.4.1](https://github.com/WeTextProcessing/WeTextProcessing).
+- If you want to use this app on MacOS, please build [openfst1.8.3](https://www.openfst.org/twiki/bin/view/FST/WebHome) manually (refer to [mac_build_openfst.sh](mac_build_openfst.sh)) and install [pynini2.1.6](https://www.openfst.org/twiki/bin/view/GRM/Pynini) by `conda install -c conda-forge pynini` and then install [WeTextProcessing 1.0.4.1](https://github.com/WeTextProcessing/WeTextProcessing).
 
 ## Acknowledge
 
