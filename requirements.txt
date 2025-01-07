@@ -7,4 +7,3 @@ torch
 spaces
 WeTextProcessing==1.0.4.1
 pynini==2.1.6
-openfst==1.8.3
